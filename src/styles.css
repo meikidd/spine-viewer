@@ -5,7 +5,7 @@
 
 .spine-viewer {
   width: 100%;
-  height: 640px;
+  /* height: 640px; */
   min-width: 0;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
