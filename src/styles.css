@@ -1,0 +1,471 @@
+.spine-viewer,
+.spine-viewer * {
+  box-sizing: border-box;
+}
+
+.spine-viewer {
+  width: 100%;
+  height: 640px;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  color: #e7ecf5;
+  background: #10141c;
+  border: 1px solid #293142;
+  border-radius: 12px;
+  font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  box-shadow: 0 18px 48px rgb(5 8 13 / 24%);
+}
+
+.spine-viewer button,
+.spine-viewer select,
+.spine-viewer input {
+  font: inherit;
+}
+
+.spine-viewer button,
+.spine-viewer select {
+  color: #e7ecf5;
+  background: #202838;
+  border: 1px solid #38445a;
+  border-radius: 7px;
+}
+
+.spine-viewer button {
+  min-height: 32px;
+  padding: 5px 11px;
+  cursor: pointer;
+}
+
+.spine-viewer button:hover:not(:disabled),
+.spine-viewer select:hover:not(:disabled) {
+  border-color: #7185a8;
+  background: #273248;
+}
+
+.spine-viewer button:focus-visible,
+.spine-viewer select:focus-visible,
+.spine-viewer input:focus-visible {
+  outline: 2px solid #62a8ff;
+  outline-offset: 2px;
+}
+
+.spine-viewer button:disabled,
+.spine-viewer select:disabled,
+.spine-viewer input:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.sv-header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  background: #171d28;
+  border-bottom: 1px solid #293142;
+}
+
+.sv-header h1,
+.sv-panel h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.sv-header h1 {
+  font-size: 17px;
+  letter-spacing: 0.01em;
+}
+
+.sv-header p {
+  margin: 1px 0 0;
+  color: #8f9cb2;
+  font-size: 12px;
+}
+
+.sv-upload {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  margin-left: auto;
+  padding: 6px 13px;
+  overflow: hidden;
+  color: #07111f;
+  background: #71b6ff;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sv-upload:hover {
+  background: #8bc3ff;
+}
+
+.sv-upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.sv-file-summary {
+  max-width: 280px;
+  overflow: hidden;
+  color: #aab5c8;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sv-error {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 16px;
+  color: #ffd8d8;
+  background: #461f28;
+  border-bottom: 1px solid #71303d;
+  font-size: 12px;
+}
+
+.sv-error span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sv-workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+
+.sv-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #131922;
+  background-image:
+    linear-gradient(45deg, #171e29 25%, transparent 25%),
+    linear-gradient(-45deg, #171e29 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #171e29 75%),
+    linear-gradient(-45deg, transparent 75%, #171e29 75%);
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+  background-size: 16px 16px;
+}
+
+.sv-stage canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
+
+.sv-stage canvas:active {
+  cursor: grabbing;
+}
+
+.sv-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #77849a;
+  pointer-events: none;
+}
+
+.sv-reset-camera {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  min-height: 28px !important;
+  color: #b8c2d2 !important;
+  background: rgb(23 29 40 / 88%) !important;
+  font-size: 12px !important;
+  backdrop-filter: blur(6px);
+}
+
+.sv-sidebar {
+  min-height: 0;
+  overflow: auto;
+  background: #171d28;
+  border-left: 1px solid #293142;
+}
+
+.sv-panel {
+  padding: 13px 14px;
+  border-bottom: 1px solid #293142;
+}
+
+.sv-panel > h2 {
+  margin-bottom: 10px;
+}
+
+.sv-panel > label:not(.sv-check, .sv-debug-master) {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
+  color: #aeb9cc;
+  font-size: 12px;
+}
+
+.sv-panel select {
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 28px 4px 9px;
+}
+
+.sv-check,
+.sv-debug-master {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #bac4d4;
+  font-size: 12px;
+}
+
+.sv-panel > .sv-check {
+  margin-top: 11px;
+}
+
+.sv-check input,
+.sv-debug-master input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: #62a8ff;
+}
+
+.sv-debug-master,
+.sv-panel-heading {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #e7ecf5;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sv-debug-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px 6px;
+  margin-top: 12px;
+}
+
+.sv-events {
+  min-height: 140px;
+}
+
+.sv-panel-heading > span {
+  min-width: 22px;
+  padding: 1px 7px;
+  color: #8fa1ba;
+  background: #222b3a;
+  border-radius: 999px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.sv-muted {
+  margin: 14px 0 3px;
+  color: #77849a;
+  font-size: 12px;
+}
+
+.sv-events ul {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sv-events li {
+  overflow: hidden;
+  background: #1c2432;
+  border: 1px solid transparent;
+  border-radius: 7px;
+}
+
+.sv-events li.is-selected {
+  background: #172d46;
+  border-color: #4c93dd;
+}
+
+.sv-event-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+}
+
+.sv-event-row > button:first-child {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: transparent;
+  border: 0;
+  text-align: left;
+}
+
+.sv-event-row time {
+  color: #82bfff;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+}
+
+.sv-event-row strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.sv-expand-event {
+  min-height: 0 !important;
+  padding: 0 !important;
+  color: #8fa1ba !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 1px solid #2b3547 !important;
+  border-radius: 0 !important;
+}
+
+.sv-event-details {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 7px 9px 9px;
+  border-top: 1px solid #2b3547;
+  font-size: 11px;
+}
+
+.sv-event-details div {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+}
+
+.sv-event-details dt {
+  color: #738199;
+}
+
+.sv-event-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.sv-transport {
+  min-height: 92px;
+  padding: 10px 16px 13px;
+  background: #171d28;
+  border-top: 1px solid #293142;
+}
+
+.sv-transport-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sv-transport-controls > button {
+  min-width: 58px;
+}
+
+.sv-transport-controls select {
+  min-height: 30px;
+  padding: 3px 25px 3px 8px;
+}
+
+.sv-transport output {
+  margin-left: auto;
+  color: #aeb9cc;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.sv-timeline {
+  position: relative;
+  height: 28px;
+  margin-top: 9px;
+}
+
+.sv-timeline > input {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  left: 0;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  accent-color: #62a8ff;
+  cursor: ew-resize;
+}
+
+.sv-event-markers {
+  position: absolute;
+  z-index: 3;
+  top: -3px;
+  right: 8px;
+  left: 8px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.sv-event-markers button {
+  position: absolute;
+  width: 10px;
+  min-width: 0;
+  height: 10px;
+  min-height: 0;
+  padding: 0;
+  transform: translateX(-50%) rotate(45deg);
+  background: #ffb44f;
+  border: 1px solid #10141c;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(255 180 79 / 25%);
+  pointer-events: auto;
+}
+
+.sv-event-markers button.is-selected {
+  z-index: 1;
+  width: 12px;
+  height: 12px;
+  background: #ffdf76;
+  box-shadow: 0 0 0 3px rgb(255 196 82 / 25%);
+}
+
+.sv-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 1100px) {
+  .sv-workspace {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+
+  .sv-file-summary {
+    max-width: 180px;
+  }
+}
