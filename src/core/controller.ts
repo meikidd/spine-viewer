@@ -219,7 +219,17 @@ export class SpineViewerController {
   }
 
   play() {
-    if (this.snapshot.status === "ready") this.update({ isPlaying: true });
+    if (this.snapshot.status !== "ready") return;
+    if (
+      !this.snapshot.loop &&
+      this.snapshot.duration > 0 &&
+      this.snapshot.time >= this.snapshot.duration
+    ) {
+      this.runtime.seek(0);
+      this.update({ time: 0, isPlaying: true });
+      return;
+    }
+    this.update({ isPlaying: true });
   }
 
   pause() {

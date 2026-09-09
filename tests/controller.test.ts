@@ -141,6 +141,57 @@ describe("SpineViewerController", () => {
     expect(adapter.seek).toHaveBeenLastCalledWith(2);
   });
 
+  it("restarts from zero when playing again after a non-looping animation ends", async () => {
+    const adapter = runtime();
+    const controller = new SpineViewerController(adapter);
+    await controller.load(files());
+    controller.setLoop(false);
+    controller.tick(2);
+
+    controller.play();
+
+    expect(controller.getSnapshot()).toMatchObject({
+      time: 0,
+      isPlaying: true,
+      loop: false
+    });
+    expect(adapter.seek).toHaveBeenLastCalledWith(0);
+  });
+
+  it("resumes from a paused time without restarting", async () => {
+    const adapter = runtime();
+    const controller = new SpineViewerController(adapter);
+    await controller.load(files());
+    controller.tick(0.5);
+    controller.pause();
+    const seekCalls = vi.mocked(adapter.seek).mock.calls.length;
+
+    controller.play();
+
+    expect(controller.getSnapshot()).toMatchObject({
+      time: 0.5,
+      isPlaying: true
+    });
+    expect(adapter.seek).toHaveBeenCalledTimes(seekCalls);
+  });
+
+  it("does not restart from the end while looping is enabled", async () => {
+    const adapter = runtime();
+    const controller = new SpineViewerController(adapter);
+    await controller.load(files());
+    controller.seek(2);
+    const seekCalls = vi.mocked(adapter.seek).mock.calls.length;
+
+    controller.play();
+
+    expect(controller.getSnapshot()).toMatchObject({
+      time: 2,
+      isPlaying: true,
+      loop: true
+    });
+    expect(adapter.seek).toHaveBeenCalledTimes(seekCalls);
+  });
+
   it("does not commit an older load that finishes after a newer load", async () => {
     const resolvers = new Map<string, (value: SpineRuntimeMetadata) => void>();
     const adapter = runtime();
