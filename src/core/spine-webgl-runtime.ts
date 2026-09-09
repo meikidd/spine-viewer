@@ -123,7 +123,7 @@ export class SpineWebGLRuntime implements SpineRuntime {
   private animation: spine.Animation | null = null;
   private bounds: Bounds = { x: -50, y: -50, width: 100, height: 100 };
   private currentTime = 0;
-  private premultipliedAlpha = true;
+  private premultipliedAlpha = false;
   private debug: DebugOptions = { ...NO_DEBUG };
   private camera: CameraState = { zoom: 1, offsetX: 0, offsetY: 0 };
 

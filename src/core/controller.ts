@@ -129,7 +129,7 @@ const INITIAL_SNAPSHOT: ViewerSnapshot = {
   isPlaying: false,
   loop: true,
   speed: 1,
-  premultipliedAlpha: true,
+  premultipliedAlpha: false,
   debugEnabled: false,
   debug: { ...DEFAULT_DEBUG },
   selectedEventId: null,

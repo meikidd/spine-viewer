@@ -85,7 +85,7 @@ describe("SpineViewerController", () => {
       expect.objectContaining({
         skeletonFile: expect.objectContaining({ name: "hero.json" })
       }),
-      { premultipliedAlpha: true }
+      { premultipliedAlpha: false }
     );
   });
 
